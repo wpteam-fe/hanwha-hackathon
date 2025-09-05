@@ -1,4 +1,3 @@
-import React from "react";
 import { useAppStore } from "@/stores/appStore";
 import LandingPage from "@/pages/LandingPage";
 import AuthPage from "@/pages/AuthPage";

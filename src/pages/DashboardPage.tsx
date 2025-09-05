@@ -10,14 +10,7 @@ import {
 } from "@/components/ui/card";
 import { useAppStore } from "@/stores/appStore";
 import { useAuthStore } from "@/stores/authStore";
-import {
-  TrendingUp,
-  TrendingDown,
-  Coins,
-  PieChart,
-  History,
-  Wallet,
-} from "lucide-react";
+import { TrendingUp, Coins, PieChart, History, Wallet } from "lucide-react";
 import { formatCurrency, formatCurrencyShort } from "@/lib/utils";
 import {
   PieChart as RechartsPieChart,

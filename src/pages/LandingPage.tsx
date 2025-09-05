@@ -44,7 +44,7 @@ const LandingPage: React.FC = () => {
                 }
                 className="w-[160px] h-10 bg-transparent text-white border border-white rounded-lg text-[13px] font-normal hover:bg-white hover:text-[#141414] transition-all duration-200"
               >
-                AI 자산 분배 현황
+                AI 맞춤 포트폴리오
               </Button>
             </div>
           </div>
@@ -224,8 +224,11 @@ const LandingPage: React.FC = () => {
             <p className="text-xl text-[#868E96] leading-7 text-left">
               AI 맞춤 포트폴리오로 안정과 성장을 동시에 시작해 보세요
             </p>
+
             <Button
-              onClick={handleStartAnalysis}
+              onClick={() =>
+                window.open("https://ai-hackathon-blond.vercel.app", "_blank")
+              }
               className="bg-[#141414] text-white border-none w-[233px] h-14 text-base font-bold rounded-xl hover:bg-[#333] transition-colors duration-200"
             >
               AI 맞춤 포트폴리오 확인하기
@@ -907,9 +910,9 @@ const LandingPage: React.FC = () => {
               </p>
               <Button
                 onClick={handleStartAnalysis}
-                className="bg-[#141414] text-white border-none w-40 h-14 text-base font-bold rounded-xl hover:bg-[#333] transition-colors duration-200"
+                className="bg-[#141414] text-white border-none px-5 h-14 text-base font-bold rounded-xl hover:bg-[#555] transition-colors duration-200"
               >
-                투자 시작하기
+                AI 자산 분석 시작하기
               </Button>
             </div>
           </div>

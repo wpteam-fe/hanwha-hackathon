@@ -9,6 +9,10 @@ const LandingPage: React.FC = () => {
     setCurrentStep("auth");
   };
 
+  const handleStablecoinIntro = () => {
+    setCurrentStep("stablecoin-intro");
+  };
+
   return (
     <div className="min-h-screen bg-black text-white font-['Pretendard']">
       {/* Header */}
@@ -92,7 +96,10 @@ const LandingPage: React.FC = () => {
             한화 스테이블달러(HSD)는 안정성과 신뢰를 기반으로, 글로벌 자산
             투자와 생애 설계의 출발점이 됩니다
           </p>
-          <Button className="bg-[#141414] text-white border-none w-60 h-14 text-base font-bold rounded-xl mb-[60px] hover:bg-[#555] transition-colors duration-200">
+          <Button
+            onClick={handleStablecoinIntro}
+            className="bg-[#141414] text-white border-none w-60 h-14 text-base font-bold rounded-xl mb-[60px] hover:bg-[#555] transition-colors duration-200"
+          >
             한화 스테이블 더 알아보기
           </Button>
 

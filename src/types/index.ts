@@ -75,7 +75,8 @@ export interface AppState {
     | "pension-fetch"
     | "conversion"
     | "dashboard"
-    | "completion";
+    | "completion"
+    | "stablecoin-intro";
   pensionInfo: PensionInfo | null;
   assetInfo: AssetInfo | null;
   isLoading: boolean;

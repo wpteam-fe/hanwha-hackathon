@@ -5,6 +5,7 @@ import PensionFetchPage from "@/pages/PensionFetchPage";
 import ConversionPage from "@/pages/ConversionPage";
 import CompletionPage from "@/pages/CompletionPage";
 import DashboardPage from "@/pages/DashboardPage";
+import StablecoinIntroPage from "@/pages/StablecoinIntroPage";
 
 function App() {
   const currentStep = useAppStore((state) => state.currentStep);
@@ -23,6 +24,8 @@ function App() {
         return <CompletionPage />;
       case "dashboard":
         return <DashboardPage />;
+      case "stablecoin-intro":
+        return <StablecoinIntroPage />;
       default:
         return <LandingPage />;
     }

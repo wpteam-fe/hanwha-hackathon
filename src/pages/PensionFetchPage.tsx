@@ -20,47 +20,55 @@ import {
 } from "lucide-react";
 import { delay } from "@/lib/utils";
 import { PensionInfo } from "@/types";
+import {
+  calculateTotalPensionAssets,
+  calculateTotalExpectedMonthlyPension,
+  calculateMonthlyShortfall,
+} from "@/utils/pensionCalculations";
+
+const fetchSteps = [
+  {
+    id: "health",
+    name: "건강보험공단",
+    description: "국민연금 정보 조회 중...",
+    icon: <Building2 className="w-6 h-6" />,
+    duration: 2000,
+  },
+  {
+    id: "tax",
+    name: "국세청",
+    description: "퇴직연금 정보 조회 중...",
+    icon: <CreditCard className="w-6 h-6" />,
+    duration: 2500,
+  },
+  {
+    id: "pension",
+    name: "국민연금공단",
+    description: "국민연금 상세 정보 조회 중...",
+    icon: <PiggyBank className="w-6 h-6" />,
+    duration: 2000,
+  },
+  {
+    id: "mydata",
+    name: "마이데이터",
+    description: "개인연금 정보 조회 중...",
+    icon: <CheckCircle className="w-6 h-6" />,
+    duration: 3000,
+  },
+];
 
 const PensionFetchPage: React.FC = () => {
   const setCurrentStep = useAppStore((state) => state.setCurrentStep);
   const setPensionInfo = useAppStore((state) => state.setPensionInfo);
+  const setAssetInfo = useAppStore((state) => state.setAssetInfo);
   const setLoading = useAppStore((state) => state.setLoading);
   const setError = useAppStore((state) => state.setError);
+  const assetInfo = useAppStore((state) => state.assetInfo);
+  const pensionInfo = useAppStore((state) => state.pensionInfo);
   const user = useAuthStore((state) => state.user);
 
   const [currentStep, setCurrentStepState] = useState(0);
   const [progress, setProgress] = useState(0);
-
-  const fetchSteps = [
-    {
-      id: "health",
-      name: "건강보험공단",
-      description: "국민연금 정보 조회 중...",
-      icon: <Building2 className="w-6 h-6" />,
-      duration: 2000,
-    },
-    {
-      id: "tax",
-      name: "국세청",
-      description: "퇴직연금 정보 조회 중...",
-      icon: <CreditCard className="w-6 h-6" />,
-      duration: 2500,
-    },
-    {
-      id: "pension",
-      name: "국민연금공단",
-      description: "국민연금 상세 정보 조회 중...",
-      icon: <PiggyBank className="w-6 h-6" />,
-      duration: 2000,
-    },
-    {
-      id: "mydata",
-      name: "마이데이터",
-      description: "개인연금 정보 조회 중...",
-      icon: <CheckCircle className="w-6 h-6" />,
-      duration: 3000,
-    },
-  ];
 
   useEffect(() => {
     const fetchPensionData = async () => {
@@ -118,7 +126,24 @@ const PensionFetchPage: React.FC = () => {
         };
 
         setPensionInfo(mockPensionInfo);
-      } catch (error) {
+
+        // 공통 계산 함수를 사용하여 연금 총액 계산
+        const totalPensionAssets = calculateTotalPensionAssets(mockPensionInfo);
+        const totalExpectedMonthlyPension = calculateTotalExpectedMonthlyPension(mockPensionInfo);
+        const monthlyShortfall = calculateMonthlyShortfall(
+          user?.targetMonthlyIncome || 0,
+          totalExpectedMonthlyPension
+        );
+
+        // 앱 스토어에 총액 저장
+        setAssetInfo({
+          totalPensionAssets,
+          totalExpectedMonthlyPension,
+          monthlyShortfall,
+          investmentAccounts: [],
+          investmentHistory: [],
+        });
+      } catch {
         setError("연금 정보 조회에 실패했습니다. 다시 시도해주세요.");
       } finally {
         setLoading(false);
@@ -126,7 +151,7 @@ const PensionFetchPage: React.FC = () => {
     };
 
     fetchPensionData();
-  }, []);
+  }, [setAssetInfo, setError, setLoading, setPensionInfo, user?.targetMonthlyIncome]);
 
   const handleBack = () => {
     setCurrentStep("auth");
@@ -268,12 +293,76 @@ const PensionFetchPage: React.FC = () => {
                 </div>
               </motion.div>
 
+              {/* Pension Total Amount Display - Show only when completed */}
+              {currentStep >= fetchSteps.length && assetInfo && pensionInfo && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-6"
+                >
+                  <div className="text-center">
+                    <div className="flex items-center justify-center mb-4">
+                      <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                        <CheckCircle className="w-8 h-8 text-white" />
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900">
+                        연금 조회 완료
+                      </h3>
+                    </div>
+
+                    <div className="bg-white rounded-lg p-4 mb-4 shadow-sm">
+                      <p className="text-sm text-gray-600 mb-2">
+                        조회된 연금 원화 총액
+                      </p>
+                      <p className="text-3xl font-bold text-green-600">
+                        {assetInfo.totalPensionAssets.toLocaleString()}원
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                      <div className="bg-white rounded-lg p-3 shadow-sm">
+                        <p className="text-gray-600">국민연금</p>
+                        <p className="font-semibold text-gray-900">
+                          {pensionInfo.nationalPension.totalContribution.toLocaleString()}
+                          원
+                        </p>
+                      </div>
+                      <div className="bg-white rounded-lg p-3 shadow-sm">
+                        <p className="text-gray-600">퇴직연금</p>
+                        <p className="font-semibold text-gray-900">
+                          {(
+                            pensionInfo.retirementPension
+                              .totalExpectedMonthlyPension *
+                            12 *
+                            20
+                          ).toLocaleString()}
+                          원
+                        </p>
+                      </div>
+                      <div className="bg-white rounded-lg p-3 shadow-sm">
+                        <p className="text-gray-600">개인연금</p>
+                        <p className="font-semibold text-gray-900">
+                          {(
+                            pensionInfo.privatePension
+                              .totalExpectedMonthlyPension *
+                            12 *
+                            20
+                          ).toLocaleString()}
+                          원
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
               {/* Conversion Button - Show only when completed */}
               {currentStep >= fetchSteps.length && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
                   className="text-center"
                 >
                   <Button

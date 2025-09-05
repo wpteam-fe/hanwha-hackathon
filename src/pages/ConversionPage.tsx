@@ -14,6 +14,11 @@ import { useAuthStore } from "@/stores/authStore";
 import { ArrowLeft, ArrowRightLeft, Coins, TrendingUp } from "lucide-react";
 import { delay, formatCurrency } from "@/lib/utils";
 import { AssetInfo } from "@/types";
+import {
+  calculateTotalPensionAssets,
+  calculateTotalExpectedMonthlyPension,
+  calculateMonthlyShortfall,
+} from "@/utils/pensionCalculations";
 
 const ConversionPage: React.FC = () => {
   const setCurrentStep = useAppStore((state) => state.setCurrentStep);
@@ -60,25 +65,13 @@ const ConversionPage: React.FC = () => {
       setError(null);
 
       try {
-        // 총 연금 자산 계산
-        const totalPensionAssets =
-          (pensionInfo?.nationalPension.totalContribution || 0) +
-          (pensionInfo?.retirementPension.accounts.reduce(
-            (sum, acc) => sum + acc.expectedMonthlyPension * 240,
-            0
-          ) || 0) +
-          (pensionInfo?.privatePension.accounts.reduce(
-            (sum, acc) => sum + acc.expectedMonthlyPension * 240,
-            0
-          ) || 0);
-
-        const totalExpectedMonthlyPension =
-          (pensionInfo?.nationalPension.expectedMonthlyPension || 0) +
-          (pensionInfo?.retirementPension.totalExpectedMonthlyPension || 0) +
-          (pensionInfo?.privatePension.totalExpectedMonthlyPension || 0);
-
-        const monthlyShortfall =
-          (user?.targetMonthlyIncome || 0) - totalExpectedMonthlyPension;
+        // 공통 계산 함수를 사용하여 연금 총액 계산
+        const totalPensionAssets = pensionInfo ? calculateTotalPensionAssets(pensionInfo) : 0;
+        const totalExpectedMonthlyPension = pensionInfo ? calculateTotalExpectedMonthlyPension(pensionInfo) : 0;
+        const monthlyShortfall = calculateMonthlyShortfall(
+          user?.targetMonthlyIncome || 0,
+          totalExpectedMonthlyPension
+        );
 
         for (let i = 0; i < conversionSteps.length; i++) {
           setCurrentStepState(i);
@@ -86,12 +79,14 @@ const ConversionPage: React.FC = () => {
 
           // 변환 금액 애니메이션
           if (i === 1) {
-            const targetAmount = totalPensionAssets * 0.3; // 30% 변환
+            const targetAmount = totalPensionAssets; // 100% 변환
             const steps = 30;
             const increment = targetAmount / steps;
 
+            // convertedAmount를 0으로 초기화한 후 애니메이션
+            setConvertedAmount(0);
             for (let j = 0; j < steps; j++) {
-              setConvertedAmount((prev) => prev + increment);
+              setConvertedAmount(increment * (j + 1));
               await delay(conversionSteps[i].duration / steps);
             }
           } else {
@@ -133,7 +128,7 @@ const ConversionPage: React.FC = () => {
         // 잠시 대기 후 완료 페이지로
         await delay(2000);
         setCurrentStep("completion");
-      } catch (error) {
+      } catch {
         setError("변환 과정에서 오류가 발생했습니다. 다시 시도해주세요.");
       } finally {
         setLoading(false);
@@ -143,7 +138,7 @@ const ConversionPage: React.FC = () => {
     if (pensionInfo) {
       performConversion();
     }
-  }, [pensionInfo]);
+  }, [pensionInfo, setAssetInfo, setCurrentStep, setError, setLoading, user?.targetMonthlyIncome]);
 
   const handleBack = () => {
     setCurrentStep("pension-fetch");

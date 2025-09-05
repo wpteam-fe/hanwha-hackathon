@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { useAppStore } from "@/stores/appStore";
+import { motion } from "framer-motion";
 
 const StablecoinIntroPage: React.FC = () => {
   const setCurrentStep = useAppStore((state) => state.setCurrentStep);
@@ -32,7 +33,7 @@ const StablecoinIntroPage: React.FC = () => {
               HANWHA STABLE COIN · HSD
             </div>
             <h1 className="text-[clamp(28px,5vw,44px)] leading-[1.15] tracking-[-0.02em] font-bold mb-2">
-              보험사의 신뢰 × 국채의 안정성 × 블록체인의 투명성
+              보험사의 신뢰 ✨ 국채의 안정성 ✨ 블록체인의 투명성
             </h1>
             <p className="text-[clamp(15px,1.8vw,18px)] text-[#94a3b8] mb-6 leading-relaxed">
               한화 스테이블 코인(HSD)은 국채·공공채 70%와 보험사의 지급여력 기반
@@ -55,10 +56,201 @@ const StablecoinIntroPage: React.FC = () => {
             </div>
           </div>
           <div className="relative aspect-[1.1/1] rounded-2xl bg-gradient-to-b from-[#0b1328] to-[#0a0f1f] shadow-[0_20px_60px_rgba(2,8,23,0.6)] overflow-hidden">
-            <div className="absolute top-0 left-0 w-[140px] h-[140px] bg-gradient-radial from-[#e5640e]/30 to-transparent"></div>
-            <div className="absolute bottom-0 right-0 w-[180px] h-[180px] bg-gradient-radial from-[#f97316]/28 to-transparent"></div>
+            {/* Animated moving gradient circles */}
+            <motion.div
+              className="absolute w-[140px] h-[140px] bg-gradient-radial from-[#e5640e]/50 to-transparent rounded-full"
+              animate={{
+                x: [0, 400, 200, 100, 0],
+                y: [0, 100, 300, 200, 0],
+                opacity: [0.5, 0.2, 0.6, 0.3, 0.5],
+                scale: [1, 0.8, 1.2, 0.9, 1],
+              }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+            <motion.div
+              className="absolute w-[180px] h-[180px] bg-gradient-radial from-[#f97316]/45 to-transparent rounded-full"
+              animate={{
+                x: [0, 100, 300, 200, 0],
+                y: [0, 200, 100, 300, 0],
+                opacity: [0.45, 0.15, 0.55, 0.25, 0.45],
+                scale: [1, 1.1, 0.7, 1.3, 1],
+              }}
+              transition={{
+                duration: 10,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 2,
+              }}
+            />
+            <motion.div
+              className="absolute w-[120px] h-[120px] bg-gradient-radial from-[#e5640e]/40 to-transparent rounded-full"
+              animate={{
+                x: [0, 300, 160, 400, 0],
+                y: [0, 160, 240, 120, 0],
+                opacity: [0.4, 0.1, 0.5, 0.2, 0.4],
+                scale: [1, 0.6, 1.4, 0.8, 1],
+              }}
+              transition={{
+                duration: 12,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 4,
+              }}
+            />
+
+            {/* Animated moving small rectangles */}
+            <motion.div
+              className="absolute w-4 h-4 bg-[#e5640e]/70 rounded-sm"
+              animate={{
+                x: [20, 400, 200, 100, 20],
+                y: [30, 160, 300, 240, 30],
+                opacity: [0.7, 0.3, 0.9, 0.5, 0.7],
+                rotate: [0, 90, 180, 270, 360],
+              }}
+              transition={{
+                duration: 15,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+            <motion.div
+              className="absolute w-3 h-6 bg-[#f97316]/65 rounded-sm"
+              animate={{
+                x: [300, 100, 240, 200, 300],
+                y: [100, 240, 160, 300, 100],
+                opacity: [0.65, 0.25, 0.8, 0.4, 0.65],
+                rotate: [0, -90, -180, -270, -360],
+              }}
+              transition={{
+                duration: 18,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 3,
+              }}
+            />
+            <motion.div
+              className="absolute w-5 h-3 bg-[#e5640e]/60 rounded-sm"
+              animate={{
+                x: [200, 360, 60, 300, 200],
+                y: [240, 80, 200, 160, 240],
+                opacity: [0.6, 0.2, 0.75, 0.35, 0.6],
+                rotate: [0, 45, 90, 135, 180],
+              }}
+              transition={{
+                duration: 20,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 6,
+              }}
+            />
+            <motion.div
+              className="absolute w-2 h-8 bg-[#f97316]/55 rounded-sm"
+              animate={{
+                x: [240, 160, 300, 200, 240],
+                y: [200, 280, 120, 240, 200],
+                opacity: [0.55, 0.15, 0.7, 0.3, 0.55],
+                rotate: [0, 180, 360, 180, 0],
+              }}
+              transition={{
+                duration: 22,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 9,
+              }}
+            />
+            <motion.div
+              className="absolute w-3 h-3 bg-[#e5640e]/60 rounded-sm"
+              animate={{
+                x: [100, 300, 160, 360, 100],
+                y: [200, 40, 260, 160, 200],
+                opacity: [0.6, 0.2, 0.8, 0.3, 0.6],
+                rotate: [0, 120, 240, 360, 0],
+              }}
+              transition={{
+                duration: 16,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 1,
+              }}
+            />
+            <motion.div
+              className="absolute w-6 h-2 bg-[#f97316]/50 rounded-sm"
+              animate={{
+                x: [240, 60, 200, 100, 240],
+                y: [160, 240, 80, 200, 160],
+                opacity: [0.5, 0.15, 0.65, 0.25, 0.5],
+                rotate: [0, -60, -120, -180, -240],
+              }}
+              transition={{
+                duration: 19,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 5,
+              }}
+            />
+            <motion.div
+              className="absolute w-2 h-5 bg-[#e5640e]/65 rounded-sm"
+              animate={{
+                x: [160, 300, 120, 240, 160],
+                y: [80, 200, 220, 120, 80],
+                opacity: [0.65, 0.2, 0.75, 0.3, 0.65],
+                rotate: [0, 72, 144, 216, 288],
+              }}
+              transition={{
+                duration: 17,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 7,
+              }}
+            />
+            <motion.div
+              className="absolute w-4 h-2 bg-[#f97316]/45 rounded-sm"
+              animate={{
+                x: [160, 300, 80, 240, 160],
+                y: [200, 120, 220, 160, 200],
+                opacity: [0.45, 0.1, 0.6, 0.2, 0.45],
+                rotate: [0, -45, -90, -135, -180],
+              }}
+              transition={{
+                duration: 21,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 11,
+              }}
+            />
+            <motion.div
+              className="absolute w-1 h-6 bg-[#e5640e]/70 rounded-sm"
+              animate={{
+                x: [200, 80, 260, 160, 200],
+                y: [120, 200, 40, 220, 120],
+                opacity: [0.7, 0.25, 0.85, 0.35, 0.7],
+                rotate: [0, 90, 180, 270, 360],
+              }}
+              transition={{
+                duration: 14,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 13,
+              }}
+            />
+
             <div className="absolute bottom-3 right-3 bg-[#081427] border border-[#94a3b8]/20 text-[#cbd5e1] rounded-xl px-3 py-2 text-xs flex items-center gap-2 backdrop-blur-sm shadow-[0_10px_30px_rgba(2,8,23,0.55)]">
-              <div className="w-2 h-2 rounded-full bg-[#e5640e]"></div>
+              <motion.div
+                className="w-2 h-2 rounded-full bg-[#e5640e]"
+                animate={{
+                  opacity: [1, 0.3, 1],
+                  scale: [1, 1.2, 1],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
               Real-time Proof‑of‑Reserves
             </div>
           </div>

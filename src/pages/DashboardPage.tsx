@@ -32,7 +32,7 @@ const DashboardPage: React.FC = () => {
   const user = useAuthStore((state) => state.user);
 
   const handleStartAnalysis = () => {
-    setCurrentStep("auth");
+    setCurrentStep("landing");
   };
 
   // 차트 데이터
@@ -74,7 +74,10 @@ const DashboardPage: React.FC = () => {
       {/* Header */}
       <header className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
+          <div
+            className="flex items-center space-x-2 cursor-pointer"
+            onClick={() => setCurrentStep("landing")}
+          >
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">H</span>
             </div>

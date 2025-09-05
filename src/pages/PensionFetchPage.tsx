@@ -118,10 +118,6 @@ const PensionFetchPage: React.FC = () => {
         };
 
         setPensionInfo(mockPensionInfo);
-
-        // 잠시 대기 후 다음 단계로
-        await delay(1500);
-        setCurrentStep("conversion");
       } catch (error) {
         setError("연금 정보 조회에 실패했습니다. 다시 시도해주세요.");
       } finally {
@@ -134,6 +130,10 @@ const PensionFetchPage: React.FC = () => {
 
   const handleBack = () => {
     setCurrentStep("auth");
+  };
+
+  const handleGoToConversion = () => {
+    setCurrentStep("conversion");
   };
 
   return (
@@ -149,7 +149,10 @@ const PensionFetchPage: React.FC = () => {
           >
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <div className="flex items-center space-x-2">
+          <div
+            className="flex items-center space-x-2 cursor-pointer"
+            onClick={() => setCurrentStep("landing")}
+          >
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">H</span>
             </div>
@@ -239,17 +242,49 @@ const PensionFetchPage: React.FC = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.5 }}
-                className="bg-blue-50 p-4 rounded-lg"
+                className={`p-4 rounded-lg ${
+                  currentStep < fetchSteps.length ? "bg-blue-50" : "bg-green-50"
+                }`}
               >
                 <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                  <p className="text-blue-800 text-sm">
+                  <div
+                    className={`w-2 h-2 rounded-full ${
+                      currentStep < fetchSteps.length
+                        ? "bg-blue-500 animate-pulse"
+                        : "bg-green-500"
+                    }`}
+                  ></div>
+                  <p
+                    className={`text-sm ${
+                      currentStep < fetchSteps.length
+                        ? "text-blue-800"
+                        : "text-green-800"
+                    }`}
+                  >
                     {currentStep < fetchSteps.length
                       ? `${fetchSteps[currentStep].name}에서 정보를 조회하고 있습니다...`
                       : "모든 연금 정보 조회가 완료되었습니다!"}
                   </p>
                 </div>
               </motion.div>
+
+              {/* Conversion Button - Show only when completed */}
+              {currentStep >= fetchSteps.length && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  className="text-center"
+                >
+                  <Button
+                    onClick={handleGoToConversion}
+                    size="lg"
+                    className="w-full"
+                  >
+                    스테이블 코인 전환하기
+                  </Button>
+                </motion.div>
+              )}
             </CardContent>
           </Card>
         </motion.div>

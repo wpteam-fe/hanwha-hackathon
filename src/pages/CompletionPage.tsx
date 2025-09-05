@@ -26,7 +26,10 @@ const CompletionPage: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white">
       {/* Header */}
       <header className="container mx-auto px-4 py-6">
-        <div className="flex items-center space-x-2">
+        <div
+          className="flex items-center space-x-2 cursor-pointer"
+          onClick={() => setCurrentStep("landing")}
+        >
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-lg">H</span>
           </div>
